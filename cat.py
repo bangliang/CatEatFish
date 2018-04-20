@@ -28,9 +28,19 @@ class PlayerBowl(object):
 		# 设置碗的名字
 		self.BowlName = 'player'
 		
+
 	# 显示碗
 	def show(self,screen):
 		screen.blit(self.image, (self.x,self.y))
+
+
+	# 移动碗
+	def move(self,type):
+		if type == 'left':
+			self.x -= 10
+		elif type == 'right':
+			self.x += 10
+
 
 # 程序的入口
 if __name__ == '__main__':
@@ -60,8 +70,10 @@ if __name__ == '__main__':
 					exit()
 				elif event.type == pygame.KEYDOWN:
 					if event.key == pygame.K_a or event.key == pygame.K_LEFT:
+						player.move('left')
 						print("left")
 					elif event.key == pygame.K_d or event.key == pygame.K_RIGHT:
+						player.move('right')
 						print("right")
 					elif event.key == pygame.K_SPACE:
 						print('space')
