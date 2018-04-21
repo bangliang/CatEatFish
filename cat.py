@@ -6,6 +6,8 @@
 
 import pygame
 
+
+# 创建碗类
 class PlayerBowl(object):
 
 	# 初始化，完成碗的默认设置
@@ -42,6 +44,23 @@ class PlayerBowl(object):
 			self.x += 10
 
 
+# 创建鱼类
+class Fish(object):
+	# 初始化
+	def __init__(self, x=0, y=0):
+		# 设置鱼的坐标
+		self.x = x
+		self.y = y
+
+		# 鱼的图片
+		FishImageName = './photos/fish.jpg'
+		self.image = pygame.image.load(FishImageName).convert()
+
+	#显示鱼
+	def show(self,screen):
+		screen.blit(self.image,(self.x,self.y))
+
+
 # 程序的入口
 if __name__ == '__main__':
 	
@@ -52,9 +71,11 @@ if __name__ == '__main__':
 
 		background = pygame.image.load(bgImageFile).convert()
 
-		# 创建碗的对象，并显示
+		# 创建碗的对象
 		player = PlayerBowl()
-		player.show(screen)
+
+		# 创建鱼的对象
+		fish = Fish()
 
 		# 通过while循环防止程序一闪而过
 		while  True:
@@ -77,6 +98,12 @@ if __name__ == '__main__':
 						print("right")
 					elif event.key == pygame.K_SPACE:
 						print('space')
+
+			# 显示碗
+			player.show(screen)
+
+			# 显示鱼
+			fish.show(screen)
 
 			pygame.display.update()
 
