@@ -5,6 +5,7 @@
 """
 
 import pygame
+import time
 
 
 # 创建碗类
@@ -12,9 +13,6 @@ class PlayerBowl(object):
 
 	# 初始化，完成碗的默认设置
 	def __init__(self):
-
-		# 存储鱼饵列表
-		self.BaitList = []
 
 		# 碗的图片
 		BowlImageName = './photos/bowl.png'
@@ -37,11 +35,11 @@ class PlayerBowl(object):
 
 
 	# 移动碗
-	def move(self,type):
-		if type == 'left':
-			self.x -= 10
-		elif type == 'right':
-			self.x += 10
+	def move_left(self):
+		self.x -= 10
+
+	def move_right(self):
+		self.x += 10
 
 
 # 创建鱼类
@@ -60,50 +58,60 @@ class Fish(object):
 	def show(self,screen):
 		screen.blit(self.image,(self.x,self.y))
 
+	# 移动鱼
+	def move(self):
+		if self.y < 220:
+			self.y += 5
+
+
+
+
+def Key_control(bowl):
+
+	for event in pygame.event.get():
+
+		if event.type == pygame.QUIT:
+			print("exit")
+			exit()
+
+		elif event.type == pygame.KEYDOWN:
+
+			if event.key == pygame.K_a or event.key == pygame.K_LEFT:
+				bowl.move_left()
+				print("left")
+
+			elif event.key == pygame.K_d or event.key == pygame.K_RIGHT:
+				bowl.move_right()
+				print("right")
+
+			elif event.key == pygame.K_SPACE:
+				print('space')
+
+def main():
+		# 创建一个长663高306的窗口
+	screen = pygame.display.set_mode((663,306),0,32)
+
+	bgImageFile = './photos/background.jpeg'
+
+	background = pygame.image.load(bgImageFile).convert()
+
+	# 创建碗的对象
+	player = PlayerBowl()
+
+	# 创建鱼的对象
+	fish = Fish()
+
+	# 通过while循环防止程序一闪而过
+	while  True:
+		screen.blit(background,(0,0))
+		player.show(screen)
+		fish.show(screen)
+		fish.move()
+		pygame.display.update()
+		Key_control(player)
+
+		time.sleep(0.1)
 
 # 程序的入口
 if __name__ == '__main__':
-	
-		# 创建一个长663高306的窗口
-		screen = pygame.display.set_mode((663,306),0,32)
-
-		bgImageFile = './photos/background.jpeg'
-
-		background = pygame.image.load(bgImageFile).convert()
-
-		# 创建碗的对象
-		player = PlayerBowl()
-
-		# 创建鱼的对象
-		fish = Fish()
-
-		# 通过while循环防止程序一闪而过
-		while  True:
-			
-			# 显示背景
-			screen.blit(background,(0,0))
-			player.show(screen)
-		
-			# 键盘键盘
-			for event in pygame.event.get():
-				if event.type == pygame.QUIT:
-					print("exit")
-					exit()
-				elif event.type == pygame.KEYDOWN:
-					if event.key == pygame.K_a or event.key == pygame.K_LEFT:
-						player.move('left')
-						print("left")
-					elif event.key == pygame.K_d or event.key == pygame.K_RIGHT:
-						player.move('right')
-						print("right")
-					elif event.key == pygame.K_SPACE:
-						print('space')
-
-			# 显示碗
-			player.show(screen)
-
-			# 显示鱼
-			fish.show(screen)
-
-			pygame.display.update()
-
+	main()
