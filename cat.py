@@ -89,24 +89,15 @@ class Fish(object):
 		print(self.y)
 
 def CatEatFish(bowl,fish):
-	y = bowl.y - fish.y
-	if bowl.x >= fish.x:
-		x = bowl.x -fish.x 
-		if fish.y == 220 and x > 20:
-			change(fish)
-			bowl.miss()
-		elif y<30 and x<=20:
+	X = fish.x + 27 - bowl.x
+	Y = bowl.y- fish.y
+	if Y<=30:
+		if 0<=X<=97:
 			change(fish)
 			bowl.eat()
-	else:
-		x = fish.x - bowl.x
-		if fish.y == 220 and x > 60:
+		else:
 			change(fish)
 			bowl.miss()
-		elif y<30 and x<=60:
-			change(fish)
-			bowl.eat()
-
 
 def Key_control(bowl):
 
@@ -136,7 +127,6 @@ def change(fish_temp):
 def over(bowl_temp,fish_temp):
 	if bowl_temp.counts == 10:
 		print('You win!Welcome next challenge!')
-		time.sleep(1)
 		fish_temp.speed += 1
 		return 1
 	elif bowl_temp.hp == 0:
@@ -145,12 +135,17 @@ def over(bowl_temp,fish_temp):
 		return 0
 
 def main():
+
+	pygame.init()
+
 		# 创建一个长663高306的窗口
 	screen = pygame.display.set_mode((663,306),0,32)
 
 	bgImageFile = './photos/background.jpeg'
 
 	background = pygame.image.load(bgImageFile).convert()
+
+	pygame.display.set_caption("猫吃鱼大作战！")
 
 	# 创建碗的对象
 	player = PlayerBowl(screen)
@@ -171,9 +166,11 @@ def main():
 		CatEatFish(player,fish)
 		fish.show()
 
+		print(player.counts,player.hp)
+
 		game = over(player,fish)
 		if(game == 0):
-			break
+			main()
 
 		time.sleep(0.1)
 
