@@ -20,7 +20,7 @@ class PlayerBowl(object):
 		self.image = pygame.image.load(BowlImageName).convert()
 
 		# 设置默认坐标
-		self.x = 290
+		self.x = 240
 		self.y = 240
 
 		# 设置速度
@@ -34,6 +34,8 @@ class PlayerBowl(object):
 		self.counts = 0
 
 		self.hp = 10
+
+		self.level = 1
 		
 
 	# 显示碗
@@ -43,14 +45,14 @@ class PlayerBowl(object):
 
 	# 移动碗
 	def move_left(self):
-		if self.x <0 or self.x >560:
-			self += 10
+		if self.x < 10:
+			self.x += 10
 		else:
 			self.x -= 10
 
 	def move_right(self):
-		if self.x <0 or self.x >560:
-			self -= 10
+		if self.x > 500:
+			self.x -= 10
 		else:
 			self.x += 10
 
@@ -60,6 +62,15 @@ class PlayerBowl(object):
 	def eat(self):
 		self.counts +=1
 
+	def win(self):
+		self.hp = 10
+		self.counts = 0
+		self.level += 1
+
+	def lose(self):
+		self.hp = 10
+		self.counts = 0
+
 
 
 # 创建鱼类
@@ -67,7 +78,7 @@ class Fish(object):
 	# 初始化
 	def __init__(self,screen,speed=5):
 		# 设置鱼的坐标
-		self.x = 20
+		self.x = 0
 		self.y = 0
 
 		self.screen = screen
@@ -121,25 +132,25 @@ def Key_control(bowl):
 				print('space')
 
 def change(fish_temp):
-	fish_temp.x = random.randrange(40,306,10)
+	fish_temp.x = random.randrange(40,550,10)
 	fish_temp.y = random.randrange(0,50,5)
 
 def over(bowl_temp,fish_temp):
 	if bowl_temp.counts == 10:
 		print('You win!Welcome next challenge!')
 		fish_temp.speed += 1
-		return 1
+		bowl_temp.win()
 	elif bowl_temp.hp == 0:
-		time.sleep(1)
 		print('You lose!')
-		return 0
+		bowl_temp.lose()
+		time.sleep(1)
 
 def main():
 
 	pygame.init()
 
 		# 创建一个长663高306的窗口
-	screen = pygame.display.set_mode((663,306),0,32)
+	screen = pygame.display.set_mode((600,306),0,32)
 
 	bgImageFile = './photos/background.jpeg'
 
@@ -152,6 +163,7 @@ def main():
 
 	# 创建鱼的对象
 	fish = Fish(screen)
+	change(fish)
 
 
 	# 通过while循环防止程序一闪而过
@@ -164,13 +176,10 @@ def main():
 		Key_control(player)
 		
 		CatEatFish(player,fish)
+		over(player,fish)
 		fish.show()
 
-		print(player.counts,player.hp)
-
-		game = over(player,fish)
-		if(game == 0):
-			main()
+		print(player.counts,player.hp,player.level)
 
 		time.sleep(0.1)
 
