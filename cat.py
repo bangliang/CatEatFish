@@ -70,6 +70,7 @@ class PlayerBowl(object):
 	def lose(self):
 		self.hp = 10
 		self.counts = 0
+		self.level = 1
 
 
 
@@ -95,7 +96,7 @@ class Fish(object):
 
 	# 移动鱼
 	def move(self):
-		if self.y < 220:
+		if self.y < 300:
 			self.y += self.speed
 		print(self.y)
 
@@ -106,7 +107,7 @@ def CatEatFish(bowl,fish):
 		if 0<=X<=97:
 			change(fish)
 			bowl.eat()
-		else:
+		elif fish.y == 300:
 			change(fish)
 			bowl.miss()
 
