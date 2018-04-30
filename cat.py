@@ -31,10 +31,13 @@ class PlayerBowl(object):
 
 		self.screen = screen
 
+		# 设置玩家得分
 		self.counts = 0
 
+		# 设置玩家体力
 		self.hp = 10
 
+		# 设置游戏关卡
 		self.level = 1
 		
 
@@ -43,30 +46,35 @@ class PlayerBowl(object):
 		self.screen.blit(self.image, (self.x,self.y))
 
 
-	# 移动碗
+	# 左移碗 越界反向移动
 	def move_left(self):
 		if self.x < 10:
 			self.x += 10
 		else:
 			self.x -= 10
 
+	# 右移碗 越界反向移动
 	def move_right(self):
 		if self.x > 500:
 			self.x -= 10
 		else:
 			self.x += 10
 
+	# 没吃到鱼，体力-1
 	def miss(self):
 		self.hp -= 1
 
+	# 吃到鱼，得分+1
 	def eat(self):
 		self.counts +=1
 
+	# 关卡通关成功
 	def win(self):
 		self.hp = 10
 		self.counts = 0
 		self.level += 1
 
+	# 关卡通关失败
 	def lose(self):
 		self.hp = 10
 		self.counts = 0
@@ -100,6 +108,7 @@ class Fish(object):
 			self.y += self.speed
 		print(self.y)
 
+# 猫吃到鱼，鱼的中点坐标在猫的一定范围内
 def CatEatFish(bowl,fish):
 	X = fish.x + 27 - bowl.x
 	Y = bowl.y- fish.y
@@ -111,6 +120,7 @@ def CatEatFish(bowl,fish):
 			change(fish)
 			bowl.miss()
 
+# 键盘控制
 def Key_control(bowl):
 
 	for event in pygame.event.get():
@@ -132,10 +142,13 @@ def Key_control(bowl):
 			elif event.key == pygame.K_SPACE:
 				print('space')
 
+
+# 改变鱼的位置
 def change(fish_temp):
 	fish_temp.x = random.randrange(40,550,10)
 	fish_temp.y = random.randrange(0,50,5)
 
+# 判断通关与否
 def over(bowl_temp,fish_temp):
 	if bowl_temp.counts == 10:
 		print('You win!Welcome next challenge!')
@@ -146,11 +159,12 @@ def over(bowl_temp,fish_temp):
 		bowl_temp.lose()
 		time.sleep(1)
 
+
 def main():
 
 	pygame.init()
 
-		# 创建一个长663高306的窗口
+	# 创建一个长663高306的窗口
 	screen = pygame.display.set_mode((600,306),0,32)
 
 	bgImageFile = './photos/background.jpeg'
@@ -162,7 +176,7 @@ def main():
 	# 创建碗的对象
 	player = PlayerBowl(screen)
 
-	# 创建鱼的对象
+	# 创建鱼的对象并随机改变鱼的位置
 	fish = Fish(screen)
 	change(fish)
 
@@ -182,7 +196,7 @@ def main():
 
 		print(player.counts,player.hp,player.level)
 
-		time.sleep(0.1)
+		time.sleep(0.1)#通过延时，来降低cpu
 
 # 程序的入口
 if __name__ == '__main__':
